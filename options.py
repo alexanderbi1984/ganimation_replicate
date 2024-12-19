@@ -17,7 +17,7 @@ class Options(object):
         
     def initialize(self):
         parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        parser.add_argument('--mode', type=str, default='train', help='Mode of code. [train|test]')
+        parser.add_argument('--mode', type=str, default='train', help='Mode of code. [train|test|inference]')
         parser.add_argument('--model', type=str, default='ganimation', help='[ganimation|stargan], see model.__init__ from more details.')
         parser.add_argument('--lucky_seed', type=int, default=0, help='seed for random initialize, 0 to use current time.')
         parser.add_argument('--visdom_env', type=str, default="main", help='visdom env.')
@@ -34,6 +34,8 @@ class Options(object):
         parser.add_argument('--aus_pkl', type=str, default="aus_openface.pkl", help='AUs pickle dictionary.')
         parser.add_argument('--train_csv', type=str, default="train_ids.csv", help='train images paths')
         parser.add_argument('--test_csv', type=str, default="test_ids.csv", help='test images paths')
+        parser.add_argument('--src_csv', type=str, default="src_ids.csv", help='source images paths')
+        parser.add_argument('--tar_csv', type=str, default="tar_ids.csv", help='target images paths')
 
         parser.add_argument('--batch_size', type=int, default=25, help='input batch size.')
         parser.add_argument('--serial_batches', action='store_true', help='if specified, input images in order.')
@@ -46,7 +48,7 @@ class Options(object):
         parser.add_argument('--no_flip', action='store_true', help='if specified, do not flip image.')
         parser.add_argument('--no_aus_noise', action='store_true', help='if specified, add noise to target AUs.')
 
-        parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids, eg. 0,1,2; -1 for cpu.')
+        parser.add_argument('--gpu_ids', type=str, default='0,1', help='gpu ids, eg. 0,1,2; -1 for cpu.')
         parser.add_argument('--ckpt_dir', type=str, default='./ckpts', help='directory to save check points.')
         parser.add_argument('--load_epoch', type=int, default=0, help='load epoch; 0: do not load')
         parser.add_argument('--log_file', type=str, default="logs.txt", help='log loss')

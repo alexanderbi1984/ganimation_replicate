@@ -33,6 +33,17 @@ class BaseDataset(torch.utils.data.Dataset):
         # load image to tensor transformer
         self.img2tensor = self.img_transformer()
 
+        # if the mode is inference, then set src_img and tar_img
+        if self.opt.mode == 'inference':
+            src_filename = self.opt.src_csv  # Fixed source image paths
+            tar_filename = self.opt.tar_csv  # Fixed target image paths
+            self.src_imgs_name_file = os.path.join(self.opt.data_root, src_filename)
+            self.src_imgs_path = self.make_dataset()
+            self.tar_imgs_name_file = os.path.join(self.opt.data_root, tar_filename)
+            self.tar_imgs_path = self.make_dataset()
+
+
+
     def make_dataset(self):
         return None
 
@@ -58,7 +69,9 @@ class BaseDataset(torch.utils.data.Dataset):
         elif self.opt.resize_or_crop == 'crop':
             transform_list.append(transforms.RandomCrop(self.opt.final_size))
         elif self.opt.resize_or_crop == 'none':
-            transform_list.append(transforms.Lambda(lambda image: image))
+            # Replace lambda with a separate method call
+            transform_list.append(transforms.Lambda(self.identity_transform))
+            # transform_list.append(transforms.Lambda(lambda image: image))
         else:
             raise ValueError("--resize_or_crop %s is not a valid option." % self.opt.resize_or_crop)
 
@@ -72,9 +85,18 @@ class BaseDataset(torch.utils.data.Dataset):
 
         return img2tensor
 
+    # def __len__(self):
+    #     return len(self.imgs_path)
+    def identity_transform(self, image):
+        return image  # Identity transformation
+
     def __len__(self):
         return len(self.imgs_path)
 
+    def __getitem__(self, idx):
+        img_path = self.imgs_path[idx]
+        image = self.get_img_by_path(img_path)
+        return self.img2tensor(image)  # Apply the transformation
 
 
 

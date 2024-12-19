@@ -106,5 +106,7 @@ venv.bak/
 # project related 
 results
 ckpts
+datasets
+ckpts-20241217T015532Z-001
 sftp-config.json
 

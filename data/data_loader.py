@@ -7,6 +7,7 @@ import pickle
 import torchvision.transforms as transforms
 
 from .celeba import CelebADataset
+from .base_dataset import BaseDataset
 
 
 def create_dataloader(opt):
@@ -22,7 +23,7 @@ class DataLoader:
     def create_datase(self):
         # specify which dataset to load here
         loaded_dataset = os.path.basename(self.opt.data_root.strip('/')).lower()
-        if 'celeba' in loaded_dataset or 'emotion' in loaded_dataset:
+        if 'celeba' in loaded_dataset or 'emotion' in loaded_dataset or 'biovid' in loaded_dataset:
             dataset = CelebADataset()
         else:
             dataset = BaseDataset()
