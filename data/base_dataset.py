@@ -26,9 +26,16 @@ class BaseDataset(torch.utils.data.Dataset):
         self.imgs_name_file = os.path.join(self.opt.data_root, filename)
         self.imgs_path = self.make_dataset()
 
+
         # load AUs dicitionary 
         aus_pkl = os.path.join(self.opt.data_root, self.opt.aus_pkl)
         self.aus_dict = self.load_dict(aus_pkl)
+        if self.opt.mode == 'inference':
+            aus_pkl_src = os.path.join(self.opt.data_root, self.opt.aus_pkl_src)
+            self.aus_dict_src = self.load_dict(aus_pkl_src)
+            aus_pkl_tar = os.path.join(self.opt.data_root, self.opt.aus_pkl_tar)
+            self.aus_dict_tar = self.load_dict(aus_pkl_tar)
+
 
         # load image to tensor transformer
         self.img2tensor = self.img_transformer()

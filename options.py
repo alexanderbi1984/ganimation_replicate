@@ -32,6 +32,8 @@ class Options(object):
         parser.add_argument('--data_root', required=True, help='paths to data set.')
         parser.add_argument('--imgs_dir', type=str, default="imgs", help='path to image')
         parser.add_argument('--aus_pkl', type=str, default="aus_openface.pkl", help='AUs pickle dictionary.')
+        parser.add_argument('--aus_pkl_src',type=str, default="aus_openface_src.pkl", help='source AUs pickle dictionary.')
+        parser.add_argument('--aus_pkl_tar',type=str, default="aus_openface_tar.pkl", help='target AUs pickle dictionary.')
         parser.add_argument('--train_csv', type=str, default="train_ids.csv", help='train images paths')
         parser.add_argument('--test_csv', type=str, default="test_ids.csv", help='test images paths')
         parser.add_argument('--src_csv', type=str, default="src_ids.csv", help='source images paths')

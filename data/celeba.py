@@ -16,6 +16,15 @@ class CelebADataset(BaseDataset):
         assert os.path.isfile(img_path), "Cannot find image file: %s" % img_path
         img_id = str(os.path.splitext(os.path.basename(img_path))[0])
         return self.aus_dict[img_id] / 5.0   # norm to [0, 1]
+    def get_src_aus_by_path(self, img_path):
+        assert os.path.isfile(img_path), "Cannot find image file: %s" % img_path
+        img_id = str(os.path.splitext(os.path.basename(img_path))[0])
+        return self.src_aus_dict[img_id] / 5.0
+    def get_tar_aus_by_path(self, img_path):
+
+        assert os.path.isfile(img_path), "Cannot find image file: %s" % img_path
+        img_id = str(os.path.splitext(os.path.basename(img_path))[0])
+        return self.tar_aus_dict[img_id] / 5.0
 
     def make_dataset(self):
         # return all image full path in a list
@@ -28,7 +37,7 @@ class CelebADataset(BaseDataset):
         return imgs_path
 
     def __getitem__(self, index):
-        if opt.mode == 'train' or opt.mode == 'test':
+        if self.opt.mode == 'train' or self.opt.mode == 'test':
             img_path = self.imgs_path[index]
 
             # load source image
@@ -46,11 +55,11 @@ class CelebADataset(BaseDataset):
             src_img_path = self.src_imgs_path[index]
             src_img = self.get_img_by_path(src_img_path)
             src_img_tensor = self.img2tensor(src_img)
-            src_aus = self.get_aus_by_path(src_img_path)
+            src_aus = self.get_src_aus_by_path(src_img_path)
             tar_img_path = self.tar_imgs_path[index]
             tar_img = self.get_img_by_path(tar_img_path)
             tar_img_tensor = self.img2tensor(tar_img)
-            tar_aus = self.get_aus_by_path(tar_img_path)
+            tar_aus = self.get_tar_aus_by_path(tar_img_path)
 
         if self.is_train and not self.opt.no_aus_noise:
             tar_aus = tar_aus + np.random.uniform(-0.1, 0.1, tar_aus.shape)
