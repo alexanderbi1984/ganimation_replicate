@@ -25,7 +25,7 @@ def save_dict(data, name):
 
 def main():
     input_aus_filesdir = r"W:\Nan\OpenFace_2.2.0_win_x64\OpenFace_2.2.0_win_x64\processed"
-    output_path = r'datasets/biovid'
+    output_path = r'datasets/bn'
     filepaths = glob.glob(os.path.join(input_aus_filesdir, '*.csv'))
     filepaths.sort()
 
@@ -34,7 +34,7 @@ def main():
 
     if not os.path.isdir(output_path):
         os.makedirs(output_path)
-    save_dict(data, os.path.join(output_path, "aus_openface"))
+    save_dict(data, os.path.join(output_path, "aus_openface_src"))
 
 
 if __name__ == '__main__':

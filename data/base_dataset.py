@@ -21,10 +21,11 @@ class BaseDataset(torch.utils.data.Dataset):
         self.imgs_dir = os.path.join(self.opt.data_root, self.opt.imgs_dir)
         self.is_train = self.opt.mode == "train"
 
-        # load images path 
-        filename = self.opt.train_csv if self.is_train else self.opt.test_csv
-        self.imgs_name_file = os.path.join(self.opt.data_root, filename)
-        self.imgs_path = self.make_dataset()
+        # load images path
+        if self.opt.mode != 'inference':
+            filename = self.opt.train_csv if self.is_train else self.opt.test_csv
+            self.imgs_name_file = os.path.join(self.opt.data_root, filename)
+            self.imgs_path = self.make_dataset()
 
 
         # load AUs dicitionary 
@@ -32,9 +33,9 @@ class BaseDataset(torch.utils.data.Dataset):
         self.aus_dict = self.load_dict(aus_pkl)
         if self.opt.mode == 'inference':
             aus_pkl_src = os.path.join(self.opt.data_root, self.opt.aus_pkl_src)
-            self.aus_dict_src = self.load_dict(aus_pkl_src)
+            self.src_aus_dict = self.load_dict(aus_pkl_src)
             aus_pkl_tar = os.path.join(self.opt.data_root, self.opt.aus_pkl_tar)
-            self.aus_dict_tar = self.load_dict(aus_pkl_tar)
+            self.tar_aus_dict = self.load_dict(aus_pkl_tar)
 
 
         # load image to tensor transformer
@@ -45,9 +46,9 @@ class BaseDataset(torch.utils.data.Dataset):
             src_filename = self.opt.src_csv  # Fixed source image paths
             tar_filename = self.opt.tar_csv  # Fixed target image paths
             self.src_imgs_name_file = os.path.join(self.opt.data_root, src_filename)
-            self.src_imgs_path = self.make_dataset()
+            self.src_imgs_path = self.make_dataset(self.src_imgs_name_file)
             self.tar_imgs_name_file = os.path.join(self.opt.data_root, tar_filename)
-            self.tar_imgs_path = self.make_dataset()
+            self.tar_imgs_path = self.make_dataset(self.tar_imgs_name_file)
 
 
 
@@ -98,7 +99,10 @@ class BaseDataset(torch.utils.data.Dataset):
         return image  # Identity transformation
 
     def __len__(self):
-        return len(self.imgs_path)
+        if self.opt.mode == 'inference':
+            return min(len(self.src_imgs_name_file), len(self.tar_imgs_name_file))
+        else:
+            return len(self.imgs_path)
 
     def __getitem__(self, idx):
         img_path = self.imgs_path[idx]

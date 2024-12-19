@@ -15,7 +15,8 @@ def move_bmp_files(input_folder):
                 # Get the subfolder name and remove "_aligned"
                 subfolder_name = os.path.basename(root).replace('_aligned', '')
                 # Create the new file name with the modified subfolder name as prefix
-                new_file_name = f"{subfolder_name}_{file}"
+                # new_file_name = f"{subfolder_name}_{file}"
+                new_file_name = f'{subfolder_name}.bmp'
                 # Construct the new file path
                 new_file_path = os.path.join(moved_folder, new_file_name)
                 # Move the BMP file
@@ -25,6 +26,6 @@ def move_bmp_files(input_folder):
 
 
 # Example usage
-input_folder = 'datasets/frame'
+input_folder = 'bp4d'
 move_bmp_files(input_folder)
 

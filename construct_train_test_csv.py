@@ -31,9 +31,9 @@ def list_bmp_files_to_csv(folder_path, output_train_csv, output_test_csv, train_
 
 
 # Example usage
-folder_path = r'datasets/biovid/imgs'  # Replace with your BMP folder path
-output_train_csv = r'datasets/biovid/train_ids.csv'  # Replace with your desired training output file path
-output_test_csv = r'datasets/biovid/test_ids.csv'  # Replace with your desired testing output file path
+folder_path = r"W:\Nan\ganimation_replicate\datasets\bn"  # Replace with your BMP folder path
+output_train_csv = r'datasets/bn/tar_ids.csv'  # Replace with your desired training output file path
+output_test_csv = r'datasets/bn/tmp.csv'  # Replace with your desired testing output file path
 train_ratio = 1  # Define your training ratio (e.g., 0.8 for 80% training, 20% testing)
 
 list_bmp_files_to_csv(folder_path, output_train_csv, output_test_csv, train_ratio)

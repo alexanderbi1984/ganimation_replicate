@@ -26,11 +26,13 @@ class CelebADataset(BaseDataset):
         img_id = str(os.path.splitext(os.path.basename(img_path))[0])
         return self.tar_aus_dict[img_id] / 5.0
 
-    def make_dataset(self):
+    def make_dataset(self,imgs_name_file=None):
         # return all image full path in a list
         imgs_path = []
-        assert os.path.isfile(self.imgs_name_file), "%s does not exist." % self.imgs_name_file
-        with open(self.imgs_name_file, 'r') as f:
+        if self.opt.mode != 'inference':
+            imgs_name_file = self.imgs_name_file
+        assert os.path.isfile(imgs_name_file), "%s does not exist." % self.imgs_name_file
+        with open(imgs_name_file, 'r') as f:
             lines = f.readlines()
             imgs_path = [os.path.join(self.imgs_dir, line.strip()) for line in lines]
             imgs_path = sorted(imgs_path)
@@ -65,6 +67,6 @@ class CelebADataset(BaseDataset):
             tar_aus = tar_aus + np.random.uniform(-0.1, 0.1, tar_aus.shape)
         # record paths for debug and test usage
         data_dict = {'src_img':src_img_tensor, 'src_aus':src_aus, 'tar_img':tar_img_tensor, 'tar_aus':tar_aus, \
-                        'src_path':img_path, 'tar_path':tar_img_path}
+                        'src_path':src_img_path, 'tar_path':tar_img_path}
 
         return data_dict
