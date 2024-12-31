@@ -46,6 +46,7 @@ class CelebADataset(BaseDataset):
             src_img = self.get_img_by_path(img_path)
             src_img_tensor = self.img2tensor(src_img)
             src_aus = self.get_aus_by_path(img_path)
+            src_img_path = img_path
 
             # load target image
             tar_img_path = random.choice(self.imgs_path)
