@@ -17,7 +17,7 @@ class Options(object):
         
     def initialize(self):
         parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        parser.add_argument('--mode', type=str, default='train', help='Mode of code. [train|test|inference]')
+        parser.add_argument('--mode', type=str, default='train', help='Mode of code. [train|test|inference|generate]')
         parser.add_argument('--model', type=str, default='ganimation', help='[ganimation|stargan], see model.__init__ from more details.')
         parser.add_argument('--lucky_seed', type=int, default=0, help='seed for random initialize, 0 to use current time.')
         parser.add_argument('--visdom_env', type=str, default="main", help='visdom env.')
@@ -38,6 +38,8 @@ class Options(object):
         parser.add_argument('--test_csv', type=str, default="test_ids.csv", help='test images paths')
         parser.add_argument('--src_csv', type=str, default="src_ids.csv", help='source images paths')
         parser.add_argument('--tar_csv', type=str, default="tar_ids.csv", help='target images paths')
+        parser.add_argument('--src_img_path', type=str, default="src_imgs", help='source images paths')
+        parser.add_argument('--tar_aus_path', type=str, default="tar_aus", help='target AUs paths')
 
         parser.add_argument('--batch_size', type=int, default=25, help='input batch size.')
         parser.add_argument('--serial_batches', action='store_true', help='if specified, input images in order.')
