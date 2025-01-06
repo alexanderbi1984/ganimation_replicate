@@ -23,8 +23,11 @@ class VideoGenerator:
         return image  # Identity transformation
 
     def numpy2im(self, image_numpy, imtype=np.uint8):
-        if image_numpy.shape[0] == 1:
-            image_numpy = np.tile(image_numpy, (3, 1, 1))
+        image_numpy = image_numpy[0]
+        # print(f"the shape of image_numpy is {image_numpy.shape}")
+
+        # if image_numpy.shape[0] == 1:
+        #     image_numpy = np.tile(image_numpy, (3, 1, 1))
         # input should be [0, 1]
         #image_numpy = np.transpose(image_numpy, (1, 2, 0)) * 255.0
         image_numpy = (np.transpose(image_numpy, (1, 2, 0)) / 2. + 0.5) * 255.0
@@ -61,10 +64,14 @@ class VideoGenerator:
             src_img_tensor = img2tensor(src_img_raw)
             gpu_ids = self.opt.gpu_ids
             device = torch.device('cuda:%d' % gpu_ids[0] if gpu_ids else 'cpu')
-            src_img= src_img_tensor.to(device)
+            src_img= src_img_tensor.unsqueeze(0).to(device)
             tar_aus = tar_aus / 5.0
-            tar_aus = tar_aus.type(torch.FloatTensor).to(device)
+            if isinstance(tar_aus, np.ndarray):
+                tar_aus = torch.from_numpy(tar_aus)  # Convert NumPy array to PyTorch tensor
 
+            tar_aus = tar_aus.type(torch.FloatTensor).to(device)
+            # print(f"the shape of source image is {src_img.shape}")
+            # print(f"the shape of target image is {tar_aus.shape}")
             color_mask, aus_mask, embed = self.model.net_gen(src_img, tar_aus)
             fake_img = aus_mask * src_img + (1 - aus_mask) * color_mask
             fake_img = fake_img.cpu().float().numpy()

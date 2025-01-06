@@ -47,6 +47,8 @@ class GANimationModel(BaseModel):
 
     def forward(self):
         # generate fake image
+        print(f"the shape of src_img is {self.src_img.shape}")
+        print(f"the shape of tar_aus is {self.tar_aus.shape}")
         self.color_mask ,self.aus_mask, self.embed = self.net_gen(self.src_img, self.tar_aus)
         self.fake_img = self.aus_mask * self.src_img + (1 - self.aus_mask) * self.color_mask
 
