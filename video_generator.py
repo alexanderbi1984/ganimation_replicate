@@ -95,7 +95,10 @@ class VideoGenerator:
                 base_name_src = os.path.splitext(os.path.basename(file_name))[0]
                 base_name_tar = os.path.splitext(os.path.basename(tar_aus))[0]
                 for i in range(aus_data.shape[0]):
-                    tar_aus = aus_data.iloc[i].values[5:22]
+                    # tar_aus = aus_data.iloc[i].values[5:22]
+                    tar_aus = aus_data.iloc[i, 5:22].values.reshape(1,17)
+                    # print(f"the target aus is like {tar_aus}")
+                    # print(f"the shape of aus is {tar_aus.shape}")
                     fake_img = self.generate_images(img_path, tar_aus)
                     # Create unique filename using the specified convention
                     fake_img_name = f'{base_name_src}-{base_name_tar}_{i}.bmp'
