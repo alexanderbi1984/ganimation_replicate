@@ -63,6 +63,8 @@ class VideoGenerator:
             device = torch.device('cuda:%d' % gpu_ids[0] if gpu_ids else 'cpu')
             src_img= src_img_tensor.to(device)
             tar_aus = tar_aus / 5.0
+            tar_aus = tar_aus.type(torch.FloatTensor).to(device)
+
             color_mask, aus_mask, embed = self.model.net_gen(src_img, tar_aus)
             fake_img = aus_mask * src_img + (1 - aus_mask) * color_mask
             fake_img = fake_img.cpu().float().numpy()
