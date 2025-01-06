@@ -5,6 +5,7 @@ from PIL import Image
 import torchvision.transforms as transforms
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 class VideoGenerator:
@@ -77,6 +78,26 @@ class VideoGenerator:
             fake_img = fake_img.cpu().float().numpy()
             fake_img = self.numpy2im(fake_img)
             # Display the fake_img using matplotlib
-            plt.imshow(fake_img)
-            plt.axis('off')  # Turn off axis for better visualization
-            plt.show()
+            # plt.imshow(fake_img)
+            # plt.axis('off')  # Turn off axis for better visualization
+            # plt.show()
+            return fake_img
+        
+        
+    def generate_video(self, src_img_path, tar_aus, output_path):
+        assert os.path.isdir(src_img_path), "src_img_path should be a folder"
+        os.makedirs(output_path, exist_ok=True)
+        
+        for i, file_name in enumerate(sorted(os.listdir(src_img_path))):
+            if file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
+                img_path = os.path.join(src_img_path, file_name)
+                aus_data = pd.read_csv(self.opt.tar_aus_path)
+                base_name_src = os.path.splitext(os.path.basename(file_name))[0]
+                base_name_tar = os.path.splitext(os.path.basename(tar_aus))[0]
+                for i in range(aus_data.shape[0]):
+                    tar_aus = aus_data.iloc[i].values[5:22]
+                    fake_img = self.generate_images(img_path, tar_aus)
+                    # Create unique filename using the specified convention
+                    fake_img_name = f'{base_name_src}-{base_name_tar}_{i}.bmp'
+                    fake_img_path = os.path.join(output_path, fake_img_name)
+                    fake_img.save(fake_img_path)

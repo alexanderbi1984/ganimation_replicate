@@ -40,6 +40,7 @@ class Options(object):
         parser.add_argument('--tar_csv', type=str, default="tar_ids.csv", help='target images paths')
         parser.add_argument('--src_img_path', type=str, default="src_imgs", help='source images paths')
         parser.add_argument('--tar_aus_path', type=str, default="tar_aus", help='target AUs paths')
+        parser.add_argument('--out_img_path', type=str, default="fake_frame_dir", help='fake frames path')
 
         parser.add_argument('--batch_size', type=int, default=25, help='input batch size.')
         parser.add_argument('--serial_batches', action='store_true', help='if specified, input images in order.')

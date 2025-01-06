@@ -15,11 +15,12 @@ if __name__ == '__main__':
     opt = Options().parse()
     if opt.mode == 'generate':
         instance = VideoGenerator(opt)
-        # Read the CSV file into a DataFrame
-        data = pd.read_csv(opt.tar_aus_path)
-        # Select the columns from index 2 (3rd column) to index 18 (19th column)
-        aus = data.iloc[:, 2:19].values  # This selects all rows and columns 2 to 18
-        instance.generate_images(opt.src_img_path, aus)
+        instance.generate_video(opt.src_img_path, opt.tar_img_path,opt.out_img_path)
+        # # Read the CSV file into a DataFrame
+        # data = pd.read_csv(opt.tar_aus_path)
+        # # Select the columns from index 2 (3rd column) to index 18 (19th column)
+        # aus = data.iloc[:, 2:19].values  # This selects all rows and columns 2 to 18
+        # instance.generate_images(opt.src_img_path, aus)
     else:
         solver = create_solver(opt)
         solver.run_solver()
