@@ -6,6 +6,8 @@ import torchvision.transforms as transforms
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from assemble_video_from_frames import assemble_videos_from_frames
+
 
 
 class VideoGenerator:
@@ -84,16 +86,16 @@ class VideoGenerator:
             return fake_img
         
         
-    def generate_video(self, src_img_path, tar_aus, output_path):
+    def generate_video(self, src_img_path, tar_aus_path, output_path):
         assert os.path.isdir(src_img_path), "src_img_path should be a folder"
         os.makedirs(output_path, exist_ok=True)
         
         for i, file_name in enumerate(sorted(os.listdir(src_img_path))):
             if file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
                 img_path = os.path.join(src_img_path, file_name)
-                aus_data = pd.read_csv(self.opt.tar_aus_path)
+                aus_data = pd.read_csv(tar_aus_path)
                 base_name_src = os.path.splitext(os.path.basename(file_name))[0]
-                base_name_tar = os.path.splitext(os.path.basename(tar_aus))[0]
+                base_name_tar = os.path.splitext(os.path.basename(tar_aus_path))[0]
                 for i in range(aus_data.shape[0]):
                     # tar_aus = aus_data.iloc[i].values[5:22]
                     tar_aus = aus_data.iloc[i, 5:22].values.reshape(1,17)
@@ -101,6 +103,14 @@ class VideoGenerator:
                     # print(f"the shape of aus is {tar_aus.shape}")
                     fake_img = self.generate_images(img_path, tar_aus)
                     # Create unique filename using the specified convention
-                    fake_img_name = f'{base_name_src}-{base_name_tar}_{i}.bmp'
-                    fake_img_path = os.path.join(output_path, fake_img_name)
+                    fake_img_name = f'{base_name_tar}-{base_name_src}_{i}.bmp'
+                    fake_video_name = f'{base_name_src}-{base_name_tar}'
+                    fake_video_path = os.path.join(output_path, fake_video_name)
+                    os.makedirs(fake_video_path, exist_ok=True)
+                    fake_img_path = os.path.join(fake_video_path, fake_img_name)
                     fake_img.save(fake_img_path)
+                fake_video_path = os.path.abspath(fake_video_path)
+                output_path = os.path.abspath(output_path)
+                # print(fake_video_path)
+                # print(output_path)
+                assemble_videos_from_frames(fake_video_path,output_path)
